@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<!DOCTYPE chapter
+[
+
+<!ENTITY % crl_ent PUBLIC "crl.ent" 'http://www.crifan.com/files/res/docbook/entity/crl.ent'>
+%crl_ent;
+
+]>
+
+<chapter
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="network_process">
+<title>C#的网络相关处理</title>
+
+
+<sect1 xml:id="http_handle"><title>C#中HTTP处理</title>
+    <sect2 xml:id="compressed_html"><title>C#中自动处理返回的压缩的HTML</title>
+        <para>当你处理http时，返回的html的header中包含：</para>
+        <screen>Content-Encoding: deflate</screen>
+        <para>或</para>
+        <screen>Content-Encoding: gzip</screen>
+        <para>时，说明是返回的是压缩的HTML。</para>
+        <para>想要支持压缩的html的话，C#中，在发送HttpWebRequest之前，设置AutomaticDecompression为对应的参数即可：</para>
+        <programlisting language="csharp">
+<![CDATA[
+HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+ 
+......
+ 
+req.Headers["Accept-Encoding"] = "gzip, deflate";
+//req.AutomaticDecompression = DecompressionMethods.GZip;
+req.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+]]>
+        </programlisting>
+        <para>更多解释详见：</para>
+        <para><link xl:href="http://www.crifan.com/csharp_httpwebrequest_proxy_abnormal_not_working/">【已解决】C#中HttpWebRequest使用Proxy后异常</link></para>
+    </sect2>
+
+
+    <sect2 xml:id="http_proxy"><title>C#中给HTTP添加代理Proxy支持</title>
+        <para>示例代码：</para>
+        <programlisting language="csharp">
+<![CDATA[
+using System.Net;
+WebProxy gProxy = new WebProxy("127.0.0.1", 8087);
+HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+req.Proxy = gProxy;
+]]>
+        </programlisting>
+        <para>详见：<link xl:href="http://www.crifan.com/csharp_add_proxy_for_httpwebrequest/">【已解决】C#中HttpWebRequest支持代理</link></para>
+    </sect2>
+
+    <sect2 xml:id="readline_readtoend_dead"><title>ReadLine或ReadToEnd会无限期挂掉</title>
+        <para>在用C#的GetResponseStream，常会遇到，ReadLine或ReadToEnd会无限期挂掉，所以，需要去加上对应的超时（timeout）设置：</para>
+        <para>详见：<link xl:href="http://www.crifan.com/csharp_httpwebresponse_streamreader_readline_dead_again/">【已解决】C#中在GetResponseStream得到的Stream后,通过StreamReader去ReadLine或ReadToEnd会无限期挂掉 + 给StreamReader添加Timeout支持</link></para>
+        <para></para>
+        <para></para>
+    </sect2>
+</sect1>
+
+<sect1 xml:id="cookie_handle"><title>C#中处理cookie</title>
+    <sect2 xml:id="auto_handle_cookie"><title>C#中自动处理cookie</title>
+        <para><link xl:href="http://www.crifan.com/csharp_auto_handle_cookie/">【整理】C#中如何自动处理cookie</link></para>
+        <para></para>
+    </sect2>
+
+    <sect2 xml:id="setcookie_bug"><title>SetCookie解析有bug</title>
+        <para>C#中，关于解析SetCookie，前后遇到多个bug，详见：</para>
+        <para><link xl:href="http://www.crifan.com/csharp_parse_response_cookie_uncorrect/">【经验记录】C#中，库函数有bug，会将http所返回的response响应中的headers头信息中的Set-Cookie值，解析错误，丢失部分cookie</link></para>
+        <para><link xl:href="http://www.crifan.com/csharp_another_set_cookie_parse_bug_add_wrong_path/">【已解决】又发现一个C#中解析Set-Cookie的一个bug：无故地添加cookie的path域</link></para>
+    </sect2>
+
+    <para></para>
+</sect1>
+
+<sect1 xml:id="url_handle"><title>C#中处理URL</title>
+    <sect2 xml:id="urlencode_space_plus_not_percent_20"><title>关于UrlEncode把空格编码为加号"+"而不是%20的问题</title>
+        <para>默认的HttpUtility.UrlEncode会把空格编码为加号，而不是很多人所期望的%20，导致很多人以为函数出了问题呢。其实，微软官方文档<link xl:href="http://msdn.microsoft.com/zh-cn/library/4fkewx0t.aspx">HttpUtility.UrlEncode方法</link>中，已经解释了此问题：</para>
+        <blockquote>
+            <para>您可以使用 UrlEncode 方法或 UrlPathEncode 方法对 URL 编码。</para>
+            <para>但是，方法返回不同的结果。UrlEncode 方法将每个空格字符转换为加号 (+) 字符。</para>
+            <para>UrlPathEncode 方法将每个空格字符转换为字符串 "%20"，它表示一个用十六进制表示法表示的空格。</para>
+            <para>在对 URL 的路径部分编码时使用 UrlPathEncode 方法，以保证一致的已解码 URL，与执行解码的平台或浏览器无关。</para>
+        </blockquote>
+        <para>所以，想要把空格编码为%20，用 UrlPathEncode 即可。</para>
+    </sect2>
+
+    <para></para>
+</sect1>
+
+<sect1 xml:id="webbrowser"><title>C#中的WebBrowser</title>
+    <para>C#中使用WebBrowser，相对还是很简单的，比如，打开网页，直接用uri即可：</para>
+    <programlisting language="csharp">
+<![CDATA[
+wbsChaseFootprint.Url = new Uri(strEncodedFullFootprintUrl);
+]]>
+    </programlisting>
+    <para>详见：<link xl:href="http://www.crifan.com/record_csharp_use_webbrowser_to_browse_google/">【记录】C#中使用WebBrowser浏览google页面</link></para>
+
+    <sect2 xml:id="documentcompleted_twice"><title>DocumentCompleted被调用两次</title>
+        <para>目前的解决办法，在DocumentCompleted中加上：</para>
+        <programlisting language="csharp">
+<![CDATA[
+if (!e.Url.Equals(wbsChaseFootprint.Url))
+{
+    //not actually complete, do nothing
+    return;
+}
+]]>
+        </programlisting>
+        <para>详见：<link xl:href="http://www.crifan.com/csharp_webbrowser_documentcompleted_multiple_time_called/">【已解决】C#中的WebBrowser的DocumentCompleted被调用两次</link></para>
+    </sect2>
+</sect1>
+
+</chapter>

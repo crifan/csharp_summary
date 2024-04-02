@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<!DOCTYPE chapter
+[
+
+<!ENTITY % crl_ent PUBLIC "crl.ent" 'http://www.crifan.com/files/res/docbook/entity/crl.ent'>
+%crl_ent;
+
+]>
+
+<chapter
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="csharp_learn_summary">
+<title>C#学习心得</title>
+
+<sect1 xml:id="csharp_dictionary_value"><title>C#中的字典类型变量</title>
+    <para>C#中也有类似于Python中的字典类型的变量</para>
+    <para>参考代码如下：</para>
+    <programlisting language="csharp">
+<![CDATA[
+Dictionary<String, int> dicPicIdx;
+Dictionary<string, int>.KeyCollection dicKeys;
+ 
+dicPicIdx = new Dictionary<string, int>();
+dicPicIdx.Add("EmptyDocumentFolder", 1);
+dicPicIdx.Add("NonEmptyDocumentFolder", 1);
+ 
+dicPicIdx.Add("NonEmptyAlbum", 3);
+dicPicIdx.Add("EmptyAlbum", 3);
+ 
+dicPicIdx.Add("NonEmptyFavoriteFolder", 4);
+dicPicIdx.Add("EmptyFavoriteFolder", 4);
+ 
+dicPicIdx.Add("Photo", 6);
+dicPicIdx.Add("Audio", 7);
+dicPicIdx.Add("Video", 8);
+ 
+dicKeys = dicPicIdx.Keys;
+]]>
+    </programlisting>
+</sect1>
+
+<sect1 xml:id="string_hanle"><title>C#中关于字符串的处理</title>
+    <sect2 xml:id="csharp_sprintf"><title>C#中类似于spritf的函数</title>
+        <para>C#中，类似于C中常用的spritf函数，是String.Format函数。</para>
+        <para>最简单的用法举例如下：</para>
+        <programlisting language="csharp">
+    string spritfTestStr = String.Format("Test sprintf in C#, number={0:D}, string=\"{1:s}\", float={2:0.000}", 100, "crifan", Math.PI);
+    //spritfTestStr = Test sprintf in C#, number=100, string="crifan", float=3.142
+        </programlisting>
+        <para>关于Format函数的更多的示例，可以参考微软官方文档：<link xl:href="http://msdn.microsoft.com/en-US/library/fht0f5be(v=vs.80).aspx">String.Format Method (String, Object)</link></para>
+        <para>关于其他更多不同类型的参数，比如日期，数值，枚举等，如何指定对应的格式，可以参考：</para>
+        <blockquote>
+            <itemizedlist>
+                <listitem>For more information about the composite formatting feature supported by methods such as <link xl:href="http://msdn.microsoft.com/en-US/library/system.string.format(v=vs.80).aspx">Format</link>, <link xl:href="http://msdn.microsoft.com/en-US/library/system.text.stringbuilder.appendformat(v=vs.80).aspx">AppendFormat</link>, and some overloads of <link xl:href="http://msdn.microsoft.com/en-US/library/system.console.writeline(v=vs.80).aspx">WriteLine</link>, see <link xl:href="http://msdn.microsoft.com/en-US/library/txafckwd(v=vs.80).aspx">Composite Formatting</link>. </listitem>
+                <listitem>For more information about numeric format specifiers, see <link xl:href="http://msdn.microsoft.com/en-US/library/dwhawy9k(v=vs.80).aspx">Standard Numeric Format Strings</link> and <link xl:href="http://msdn.microsoft.com/en-US/library/0c899ak8(v=vs.80).aspx">Custom Numeric Format Strings</link>. </listitem>
+                <listitem>For more information about date and time format specifiers, see <link xl:href="http://msdn.microsoft.com/en-US/library/az4se3k1(v=vs.80).aspx">Standard DateTime Format Strings</link> and <link xl:href="http://msdn.microsoft.com/en-US/library/8kb3ddd4(v=vs.80).aspx">Custom DateTime Format Strings</link>. </listitem>
+                <listitem>For more information about enumeration format specifiers, see <link xl:href="http://msdn.microsoft.com/en-US/library/c3s1ez6e(v=vs.80).aspx">Enumeration Format Strings</link>.</listitem>
+                <listitem>For more information about formatting, see <link xl:href="http://msdn.microsoft.com/en-US/library/fbxft59x(v=vs.80).aspx">Formatting Types</link> and <link xl:href="http://msdn.microsoft.com/en-US/library/26etazsy(v=vs.80).aspx">Formatting Overview</link>. </listitem>
+            </itemizedlist>
+        </blockquote>
+    </sect2>
+    
+    <sect2 xml:id="align_middle_pad_rest"><title>字符串的中间对齐左右填充的效果</title>
+        <para>代码：</para>
+        <programlisting language="csharp">
+<![CDATA[
+//input: [4] Valid: B0009IQZFM
+//output: ============================ [4] Valid: B0009IQZFM =============================
+public string formatString(string strToFormat, char cPaddingChar = '*', int iTotalWidth = 80)
+{
+    //auto added space
+    strToFormat = " " + strToFormat + " "; //" [4] Valid: B0009IQZFM "
+ 
+    //1. padding left
+    int iPaddingLen = (iTotalWidth - strToFormat.Length)/2;
+    int iLefTotalLen = iPaddingLen + strToFormat.Length;
+    string strLefPadded = strToFormat.PadLeft(iLefTotalLen, cPaddingChar); //"============================ [4] Valid: B0009IQZFM "
+    //2. padding right
+    string strFormatted = strLefPadded.PadRight(iTotalWidth, cPaddingChar); //"============================ [4] Valid: B0009IQZFM ============================="
+     
+    return strFormatted;
+}
+]]>
+        </programlisting>
+        <para>详见：<link xl:href="http://www.crifan.com/csharp_string_align_center_padding_left_and_right/">【已解决】C#中实现字符串的中间对齐左右填充的效果</link></para>
+    </sect2>
+</sect1>
+
+<sect1 xml:id="combobox_usage"><title>C#中ComboBox的使用</title>
+    <sect2 xml:id="combobox_datasource"><title>给ComboBox设置数据源</title>
+        <para>主要包含三步：</para>
+        <orderedlist>
+            <listitem>设置结构体，其中的field的名字首字母大写，支持get和set
+                <programlisting language="csharp">
+<![CDATA[
+private struct keyValueList
+{
+    public string Key{get;set;} // key
+    public List<string> ValueStrList{get;set;} // the string value list for the key
+}
+]]>
+                </programlisting>
+                <para></para>
+            </listitem>
+            <listitem>创建对应的结构体数组
+                <programlisting language="csharp">
+<![CDATA[
+List<keyValueList> gFootprintTypeSelList; // footprint type
+
+gFootprintTypeSelList = new List<keyValueList>();
+
+//1. option1: Guest Blogging
+keyValueList keyValueListGuestBlogging = new keyValueList();
+keyValueListGuestBlogging.Key = "Guest Blogging";
+keyValueListGuestBlogging.ValueStrList = new List<string>();
+//keyValueListGuestBlogging.ValueStrList.Add("Specify Footprint");
+keyValueListGuestBlogging.ValueStrList.Add("Guest Blogging");
+keyValueListGuestBlogging.ValueStrList.Add("Contribute");
+keyValueListGuestBlogging.ValueStrList.Add("Write for us");
+keyValueListGuestBlogging.ValueStrList.Add("Guest Category");
+keyValueListGuestBlogging.ValueStrList.Add("Submit Content");
+gFootprintTypeSelList.Add(keyValueListGuestBlogging);
+ 
+]]>
+                </programlisting>
+                <para></para>
+            </listitem>
+            <listitem>把结构体数组赋值给ComboBox的DataSource，把DisplayMember设置为对应的结构体的field的名字（全小写）
+                <programlisting language="csharp">
+<![CDATA[
+cmbFootprintType.DataSource = gFootprintTypeSelList;
+cmbFootprintType.DisplayMember = "key";
+]]>
+                </programlisting>
+                <para></para>
+            </listitem>
+        </orderedlist>
+        <para>详见：<link xl:href="http://www.crifan.com/csharp_combobox_set_data_source/">【已解决】C#中给ComboBox设置数据源</link></para>
+    </sect2>
+
+    <para></para>
+</sect1>
+
+</chapter>

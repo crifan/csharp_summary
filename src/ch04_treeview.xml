@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<!DOCTYPE chapter
+[
+
+<!ENTITY % crl_ent PUBLIC "crl.ent" 'http://www.crifan.com/files/res/docbook/entity/crl.ent'>
+%crl_ent;
+
+]>
+
+<chapter
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="treeview">
+<title>C#的TreeView控件使用心得</title>
+
+<sect1 xml:id="add_tree_node"><title>添加Node的方法</title>
+    <para>当前已有一个TreeView控件trvFolder，添加节点的代码如下：</para>
+    <programlisting language="csharp">
+TreeNode curNode = new TreeNode(name);
+trvFolder.Nodes.Add(curNode);
+    </programlisting>
+</sect1>
+
+<sect1 xml:id="add_icon_for_treeview"><title>给TreeView添加图标</title>
+    <para>先拖拽出来一个ImageList控件iglIcons，然后手动编辑ImageList的Images属性Collection，添加几个小图片。</para>
+    <para>对应的index分别是0,1，2，。。。，然后用：</para>
+    <programlisting>trvFolder.ImageList = iglIcons;</programlisting>
+    <para>将其关联到当前TreeView控件trvFolder。</para>
+    <para>最后，每次添加TreeNode的时候，多加一句：</para>
+    <programlisting>curNode.ImageIndex = 0;</programlisting>
+    <para>即为：</para>
+    <programlisting>
+TreeNode curNode = new TreeNode(name);
+curNode.ImageIndex = 0;
+trvFolder.Nodes.Add(curNode);
+    </programlisting>
+    <para>其中0为图片的index，可根据自己的实际情况改为对应的index。</para>
+    <para>这样就可以实现给不同的TreeNode添加对应的图标了。</para>
+</sect1>
+
+<sect1 xml:id="got_right_click_treenode"><title>获得右击所在节点</title>
+    <para>选择的是别的节点，对着另外一个节点右击，要获得被右击的节点，主要代码是：</para>
+    <programlisting language="csharp">
+<![CDATA[
+private void trvCategoryTree_MouseUp(object sender, MouseEventArgs e)
+{
+if (e.Button == MouseButtons.Right)
+{
+    // Select the clicked node
+    trvCategoryTree.SelectedNode = trvCategoryTree.GetNodeAt(e.X, e.Y);
+}
+}
+]]>
+    </programlisting>
+    <para>之后通过cmsSelection_ItemClicked也就可以通过SelectedNode得到当前右击的那个TreeNode了。</para>
+    <para>详见：<link xl:href="http://www.crifan.com/csharp_get_current_right_click_treenode/">【已解决】如何获得C#中右击弹出菜单时对应的当前所右击那个TreeNode</link></para>
+</sect1>
+
+<sect1 xml:id="context_menu"><title>添加右键菜单（Context Menu）</title>
+    <para>给TreeNode添加右键的总体的思路是：</para>
+    <orderedlist numeration="arabic">
+        <listitem>添加ContextMenuStrip
+        </listitem>
+        <listitem>在其下添加子菜单
+        </listitem>
+        <listitem>实现ItemClicked事件，在其中判断点击了哪个子菜单，然后添加代码做你要做的事情即可。
+        </listitem>
+    </orderedlist>
+    <para>详见：<link xl:href="http://www.crifan.com/csharp_treenode_add_right_menu_context_menu/">【已解决】C#中给TreeNode添加右键（Context Menu）</link></para>
+    <para></para>
+</sect1>
+
+<sect1 xml:id="set_treenode_name"><title>给TreeNode添加名字</title>
+    <para>TreeNode加入到TreeView但是不显示名字，是因为加入的TreeNode没有设置Text</para>
+    <para>（虽然设置了TreeNode的Name，但是实际上用于显示的是Text而不是Name）</para>
+    <para>所以，在把TreeNode加入TreeView之前，设置好对应的Text即可正常显示。 </para>
+    <para></para>
+    <para>详见：<link xl:href="http://www.crifan.com/csharp_added_treenode_for_treeview_but_not_display_treenode_name/">【已解决】给TreeView添加TreeNode节点后但是名字没显示出来</link></para>
+</sect1>
+
+</chapter>

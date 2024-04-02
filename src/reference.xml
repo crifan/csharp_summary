@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<bibliography
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="reference">
+    
+<bibliomixed xml:id="ref.csharp_regex_quote">
+  <bibliosource><link xl:href="http://tech.techweb.com.cn/thread-236996-1-1.html">正则表达式包含引号怎么办?</link></bibliosource>
+  <author>from website</author>
+</bibliomixed>
+
+<bibliomixed xml:id="ref.csharp_regex_most_usage">
+  <bibliosource><link xl:href="http://www.cnblogs.com/jorgen/archive/2010/10/14/1851555.html">c# Regex常用</link></bibliosource>
+  <author>jorgen</author>
+</bibliomixed>
+
+<bibliomixed xml:id="ref.csharp_learn_record_regex">
+  <bibliosource><link xl:href="http://hi.baidu.com/wenyouming1989/blog/item/c0d1f95a1e296cd39c8204b4.html">c#学习笔记《1》——regex类（个人理解）</link></bibliosource>
+  <author>you19891003</author>
+</bibliomixed>
+
+<bibliomixed xml:id="ref.add_icon_for_treeview">
+  <bibliosource><link xl:href="http://msdn.microsoft.com/zh-cn/library/aa983725">为 Windows 窗体 TreeView 控件设置图标</link></bibliosource>
+  <author>Microsoft</author>
+</bibliomixed>
+
+<bibliomixed xml:id="ref.winform_simulate_explorer_manage_pic">
+  <bibliosource><link xl:href="http://blog.csdn.net/mngzilin/article/details/5535136">winform中利用Treeview模仿资源管理器实现图片文件列表</link></bibliosource>
+  <author>mngzilin</author>
+</bibliomixed>
+
+<bibliomixed xml:id="ref.csharp_key_value_container">
+  <bibliosource><link xl:href="http://lujian811.blog.163.com/blog/static/10190113201071933020824/">C#键值对容器</link></bibliosource>
+  <author>lujian811</author>
+</bibliomixed>
+
+</bibliography>

@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<!DOCTYPE chapter
+[
+
+<!ENTITY % crl_ent PUBLIC "crl.ent" 'http://www.crifan.com/files/res/docbook/entity/crl.ent'>
+%crl_ent;
+
+]>
+
+<chapter
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xl="http://www.w3.org/1999/xlink"
+    
+    xml:id="excel_csv">
+<title>C#的处理Excel和CSV</title>
+
+<sect1 xml:id="handle_excel"><title>C#中处理Excel</title>
+    <sect2 xml:id="auto_adjust_column_width"><title>Excel自动适应列宽</title>
+        <para>全选所有列再调用AutoFit：</para>
+        <programlisting language="csharp">
+<![CDATA[
+//auto adjust column width (according to content)
+Range allColumn = xlWorkSheet.Columns;
+allColumn.AutoFit();
+]]>
+        </programlisting>
+        <para>详见：<link xl:href="http://www.crifan.com/csharp_excel_auto_adjust_column_width_autofit/">【已解决】C#中操作刚导出的Excel，设置其为自动调整列宽</link></para>
+    </sect2>
+
+    <sect2 xml:id="autofit_single_column"><title>选中Excel的某列后再去自动适应列宽</title>
+        <para>核心逻辑：</para>
+        <para>获得对应的列的Range，再去AutoFit</para>
+        <programlisting language="csharp">
+<![CDATA[
+Range firstColumn = xlWorkSheet.get_Range("A1");
+firstColumn.EntireColumn.AutoFit();
+]]>
+        </programlisting>
+        <para>详见：<link xl:href="http://www.crifan.com/csharp_excel_auto_adjust_column_width_and_howto_select_single_column/">
+【已解决】C#中操作Excel文件实现单行的自动适应列宽+C#中如何选中Excel的某列</link></para>
+    </sect2>
+    
+    <sect2 xml:id="microsoft_office_interop_excel"><title>Could not load file or assembly ‘Microsoft.Office.Interop.Excel</title>
+        <para>使用C#操作Excel常会出现类似错误：</para>
+        <para>Could not load file or assembly ‘Microsoft.Office.Interop.Excel, Version=14.0.0.0</para>
+        <para>其可能原因，现总结如下：</para>
+        <para>C#的exe用到了excel的话，希望拿到别人的地方也正常运行不报错的话， </para>
+        <para>其中，别的地方： </para>
+        <itemizedlist>
+            <listitem>可能没装excel</listitem>
+            <listitem>也可能装了excel，但是版本低</listitem>
+        </itemizedlist>
+        <para>那么有几种选择： </para>
+        <orderedlist numeration="arabic">
+            <listitem>最好自己在exe中集成了对应的excel的dll库。 
+                <para>关于，集成dll到exe中，简述为：</para>
+                <orderedlist numeration="arabic">
+                    <listitem>把dll加到自己的资源resource中</listitem>
+                    <listitem>把dll加到自己的项目中，且属性设置为 嵌入的资源（Embedded Resource）</listitem>
+                    <listitem>自己的类的初始化函数中，加上对应的load dll的相关代码 </listitem>
+                </orderedlist>
+                <para>详见：<link xl:href="http://www.crifan.com/csharp_integrate_dll_library_into_exe_application">【已解决】C#中集成DLL库到自己的exe程序中</link></para>
+                <para></para>
+                <para></para>
+            </listitem>
+            <listitem>即使不集成excel的dll，在引用excel的dll
+                <orderedlist numeration="arabic">
+                    <listitem>也要尽量引用低版本 
+                        <para>比如别人已装的excel，即Office是Office12</para>
+                        <para>那么你也就不要去引用Office14==Office2010：</para>
+                        <screen>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office14\Microsoft.Office.Interop.Excel.dll</screen>
+                        <para>了，而去引用Office12==Office2007：</para>
+                        <screen>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office12\Microsoft.Office.Interop.Excel.dll</screen>
+                    </listitem>
+                    <listitem>或者是和对方电脑中安装的excel的版本一致 
+                        <para>当然，最好确认一下，对方的电脑中装了哪个版本的Office（的excel） </para>
+                        <para>比如是Office 2010==Office14，那么你也就去引用对应的Office14：</para>
+                        <screen>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Visual Studio Tools for Office\PIA\Office14\Microsoft.Office.Interop.Excel.dll</screen>
+                        <para>就好了。</para>
+                    </listitem>
+                </orderedlist>
+            </listitem>
+        </orderedlist>
+        <para></para>
+        <para>详见：<link xl:href="http://www.crifan.com/csharp_could_not_load_file_or_assembly_microsoft_office_interop_excel_version_14/">【已解决】虽然已经安装了Office的Excel但是C#的exe还是运行出错：Could not load file or assembly ‘Microsoft.Office.Interop.Excel, Version=14.0.0.0</link></para>
+        <para></para>
+    </sect2>
+
+    <sect2 xml:id="microsoft_vbe_interop_dll"><title>Microsoft.Vbe.Interop.dll和office.dll</title>
+        <para>Microsoft.Vbe.Interop.dll和office.dll，与Microsoft.Office.Interop.Excel.dll，一起，都是属于“Microsoft Office system 的可用程序集”</para>
+        <para>所以，最好也是要在集成，Microsoft.Office.Interop.Excel.dll，时，连带的一起把：Microsoft.Vbe.Interop.dll和office.dll都集成进来。</para>
+        <para>这样，才可以避免，别人在使用exe时，内部用到excel的dll时，完整的所需要的函数，都可以自带的找到了。</para>
+        <para>不会再对于Microsoft.Vbe.Interop.dll或office.dll报错说找不到。</para>
+        <para>详见：<link xl:href="http://www.crifan.com/what_is_microsoft_vbe_interop_dll_and_office_dll/">【已解决】Microsoft.Vbe.Interop.dll和office.dll是啥</link></para>
+    </sect2>
+</sect1>
+
+<sect1 xml:id="handle_csv"><title>C#中处理CSV</title>
+    <para></para>
+    <para></para>
+    <para></para>
+    <para></para>
+</sect1>
+
+</chapter>
